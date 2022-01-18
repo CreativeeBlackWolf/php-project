@@ -10,7 +10,7 @@
         ? null 
         : $_POST["priority"];
 
-        $is_complete = (string)random_int(0, 1);
+        $is_complete = (string)random_int(1, 2);
 
         $db->exec("INSERT INTO tasks(description, priority, is_complete) VALUES (\"{$description}\", {$priority}, {$is_complete})");
         

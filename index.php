@@ -16,12 +16,12 @@
         : $_GET["is_complete"];
 
         $query = "SELECT * FROM tasks";
-
+        
         if ($description || $is_complete || $priority) {
             $query = $query . " WHERE";
+            if ($is_complete) $query = $query . " is_complete = \"{$is_complete}\" AND";
             if ($description) $query = $query . " description = \"{$description}\" AND";
-            if ($is_complete) $query = $query . " is_complete = {$is_complete} AND";
-            if ($priority) $query = $query . " priority = {$priority}";
+            if ($priority) $query = $query . " priority = \"{$priority}\"";
 
             if (str_ends_with($query, "AND"))
                 $query = substr($query, 0, -4);
@@ -29,6 +29,15 @@
 
         $tasks = [];
         $result = $db->query($query);
+        if ($result) {
+            while ($row = $result->fetchArray()) {
+                $tasks[] = $row;
+            }
+        }
+    }
+    else {
+        $tasks = [];
+        $result = $db->query("SELECT * FROM tasks");
         if ($result) {
             while ($row = $result->fetchArray()) {
                 $tasks[] = $row;
@@ -143,7 +152,7 @@
 
 <body>
     <!-- Блок для var_dump -->
-    <!-- <pre> </pre> -->
+    <pre> <?php var_dump($query); var_dump($is_complete) ?> </pre>
 
     <nav>
         <li><a href="/index.php">Все задачи</a></li>
@@ -166,8 +175,8 @@
         <?php $is_complete = $_GET["is_complete"] ?? null ?>
         <select name="is_complete">
             <option <?=$is_complete == "all" ? "selected" : ""?> value="all">Всё</option>
-            <option <?=$is_complete == "1" ? "selected" : ""?> value=1>Сделано</option>
-            <option <?=$is_complete == "2" ? "selected" : ""?> value=0>Не сделано</option>
+            <option <?=$is_complete == "1" ? "selected" : ""?> value=2>Сделано</option>
+            <option <?=$is_complete == "2" ? "selected" : ""?> value=1>Не сделано</option>
         </select>
         <br>
         <div class="actions">
@@ -186,7 +195,7 @@
                     </ul>
                     Описание: <?= $task["description"]?> <br>
                     Приоритет: <?= $task["priority"] ?> <br>
-                    Выполнение: <font color = <?= $task["is_complete"] == "0" ? "#FC0000" : "#3cff00"?>> <?= $task["is_complete"] == "0" ? "Не сделано" : "Сделано"?> </font> <br>
+                    Выполнение: <font color = <?= $task["is_complete"] == "1" ? "#FC0000" : "#3cff00"?>> <?= $task["is_complete"] == "1" ? "Не сделано" : "Сделано"?> </font> <br>
                 </div>
             <?php endforeach; ?>
     <?php else: ?>
