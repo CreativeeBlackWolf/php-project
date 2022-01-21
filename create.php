@@ -12,8 +12,12 @@
 
         $is_complete = (string)random_int(1, 2);
 
-        $db->exec("INSERT INTO tasks(description, priority, is_complete) VALUES (\"{$description}\", {$priority}, {$is_complete})");
-        
+        $stmt = $db->prepare("INSERT INTO tasks(description, priority, is_complete) VALUES (:desc, :priority, :completion)");
+        $stmt->bindParam(":desc", $description);
+        $stmt->bindParam(":priority", $priority);
+        $stmt->bindParam(":completion", $is_complete);
+        $stmt->execute();
+
         $_POST = array();
     }
 ?>
@@ -98,7 +102,7 @@
 
 <body>
     <!-- Блок для var_dump() -->
-    <pre> <?php var_dump($_POST); echo $db->changes(); ?> </pre>
+    <!-- <pre> <?php ?> </pre> -->
 
     <nav>
         <li><a href="/index.php">Все задачи</a></li>
@@ -106,9 +110,11 @@
     </nav>
 
     <!-- Блок для сообщения -->
-    <div class="message">
-        Задача добавлена успешно! (для наглядности выполнение/не выполнение для задач случайное)
-    </div>
+    <?php if (!is_null($description)): ?>
+        <div class="message">
+            Задача добавлена успешно! (для наглядности выполнение/не выполнение для задач случайное)
+        </div>
+    <?php endif; ?>
 
     <h1>Добавить задачу</h1>
 

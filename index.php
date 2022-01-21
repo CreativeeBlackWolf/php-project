@@ -152,7 +152,7 @@
 
 <body>
     <!-- Блок для var_dump -->
-    <pre> <?php var_dump($query); var_dump($is_complete) ?> </pre>
+    <!-- <pre> <?php ?> </pre> -->
 
     <nav>
         <li><a href="/index.php">Все задачи</a></li>
@@ -161,7 +161,7 @@
 
     <form method="get" action="">
         <label>Описание задачи</label>
-        <input type="text" name="description" value= <?= $_GET["description"] ?? "" ?> >
+        <input type="text" name="description" value="<?php echo($_GET['description']) ?>" >
         <label>Приоритет</label>
         <?php $priority = $_GET["priority"] ?? null ?>
         <select name="priority">
@@ -175,8 +175,8 @@
         <?php $is_complete = $_GET["is_complete"] ?? null ?>
         <select name="is_complete">
             <option <?=$is_complete == "all" ? "selected" : ""?> value="all">Всё</option>
-            <option <?=$is_complete == "1" ? "selected" : ""?> value=2>Сделано</option>
-            <option <?=$is_complete == "2" ? "selected" : ""?> value=1>Не сделано</option>
+            <option <?=$is_complete == "2" ? "selected" : ""?> value=2>Сделано</option>
+            <option <?=$is_complete == "1" ? "selected" : ""?> value=1>Не сделано</option>
         </select>
         <br>
         <div class="actions">
