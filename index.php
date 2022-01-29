@@ -8,7 +8,7 @@
         : $_GET["description"];
 
         $priority = $_GET["priority"] == "all"
-        ? null 
+        ? null
         : $_GET["priority"];
 
         $is_complete = $_GET["is_complete"] == "all"
@@ -161,11 +161,11 @@
 
     <form method="get" action="">
         <label>Описание задачи</label>
-        <input type="text" name="description" value="<?php echo($_GET['description']) ?>" >
+        <input type="text" name="description" value="<?php echo($_GET['description'] ?? null) ?>" >
         <label>Приоритет</label>
         <?php $priority = $_GET["priority"] ?? null ?>
         <select name="priority">
-            <option <?=$priority == "all" ? "selected" : ""?> value="all">Все</option>
+            <option <?=$priority == "all" ? "selected" : ""?> value=all>Все</option>
             <option <?=$priority == "1" ? "selected" : ""?> value=1>Низкий</option>
             <option <?=$priority == "2" ? "selected" : ""?> value=2>Обычный</option>
             <option <?=$priority == "3" ? "selected" : ""?> value=3>Высший</option>

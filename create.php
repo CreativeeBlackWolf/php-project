@@ -1,14 +1,13 @@
 <?php
     $db = new SQLite3("tasks.db");
+    $is_executed = false;
 
     if (count($_POST) > 0) {
         $description = $_POST["description"] == ""
         ? null 
         : $_POST["description"];
 
-        $priority = $_POST["priority"] == "all"
-        ? null 
-        : $_POST["priority"];
+        $priority = $_POST["priority"];
 
         $is_complete = (string)random_int(1, 2);
 
@@ -16,7 +15,7 @@
         $stmt->bindParam(":desc", $description);
         $stmt->bindParam(":priority", $priority);
         $stmt->bindParam(":completion", $is_complete);
-        $stmt->execute();
+        $is_executed = $stmt->execute();
 
         $_POST = array();
     }
@@ -110,7 +109,7 @@
     </nav>
 
     <!-- Блок для сообщения -->
-    <?php if (!is_null($description)): ?>
+    <?php if ($is_executed): ?>
         <div class="message">
             Задача добавлена успешно! (для наглядности выполнение/не выполнение для задач случайное)
         </div>
@@ -127,7 +126,6 @@
         <label>Приоритет</label>
         <?php $priority = $_POST["priority"] ?? null ?>
         <select name="priority">
-            <option <?=$priority == "all" ? "selected" : ""?> value="all">Все</option>
             <option <?=$priority == "1" ? "selected" : ""?> value=1>Низкий</option>
             <option <?=$priority == "2" ? "selected" : ""?> value=2>Обычный</option>
             <option <?=$priority == "3" ? "selected" : ""?> value=3>Высший</option>
